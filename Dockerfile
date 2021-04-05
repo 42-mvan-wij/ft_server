@@ -3,7 +3,7 @@ FROM debian:buster
 RUN apt-get update
 # RUN apt-get upgrade -y
 RUN apt-get install -y nginx
-RUN apt-get install -y openssl
+# RUN apt-get install -y openssl
 # RUN apt-get install -y mariadb-server
 # RUN apt-get install -y php-mysql
 # RUN apt-get install -y phpmyadmin
@@ -20,4 +20,5 @@ COPY srcs/nginx/nginx.conf /etc/nginx/sites-available/localhost
 RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/
 
 EXPOSE 80
+EXPOSE 443
 CMD nginx -g "daemon off;"
