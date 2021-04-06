@@ -14,11 +14,13 @@ COPY srcs/html /var/www/localhost
 COPY srcs/nginx/localhost.crt /etc/nginx/ssl/localhost.crt
 COPY srcs/nginx/localhost.key /etc/nginx/ssl/localhost.key
 
-RUN rm /etc/nginx/sites-available/*
 RUN rm /etc/nginx/sites-enabled/*
 COPY srcs/nginx/nginx.conf /etc/nginx/sites-available/localhost
 RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/
 
-EXPOSE 80
-EXPOSE 443
-CMD nginx -g "daemon off;"
+RUN mkdir -p /run/php
+
+COPY srcs/entrypoint.sh /etc/entrypoint.sh
+EXPOSE 80 443
+
+CMD /etc/entrypoint.sh
