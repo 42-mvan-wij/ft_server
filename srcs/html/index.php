@@ -7,6 +7,10 @@
 	<title>Hello World</title>
 </head>
 <body>
-	Hello World!
+	Hello World! (in php)
+	<br>
+	<a href="/no_index">A folder without an index page</a>
+	<br>
+	<a href="/phpmyadmin">phpMyAdmin</a>
 </body>
 </html>
