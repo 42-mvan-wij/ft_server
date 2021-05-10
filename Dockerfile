@@ -11,6 +11,7 @@ RUN apt-get install -y php-xml
 RUN apt-get install -y php-mysql
 RUN apt-get install -y php-fpm
 RUN apt-get install -y wget
+RUN apt-get install -y php-mbstring
 
 # install phpmyadmin
 COPY srcs/phpMyAdmin-5.1.0-english.tar.gz phpMyAdmin.tar.gz
@@ -24,6 +25,12 @@ RUN ln -s /usr/share/phpmyadmin /var/www
 COPY srcs/wordpress/wordpress-5.7.1.tar.gz wordpress.tar.gz
 RUN tar -xzf wordpress.tar.gz && mv wordpress /var/www/wordpress && rm wordpress.tar.gz
 
+# setup wordpress database (set password  using --build-arg wordpress_pass=<password>; default password is "wordpress")
+ARG wordpress_pass=wordpress
+COPY srcs/wordpress/setup_wordpress.sh setup_wordpress.sh
+RUN ./setup_wordpress.sh ${wordpress_pass} && rm setup_wordpress.sh
+COPY srcs/wordpress/wp-config.php /var/www/wordpress/wp-config.php
+RUN sed -i s/__DB_PASSWORD__/${wordpress_pass}/ /var/www/wordpress/wp-config.php
 
 # store ssl certificates
 COPY srcs/nginx/cert.crt /etc/nginx/ssl/cert.crt
