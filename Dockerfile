@@ -26,9 +26,8 @@ RUN wget https://wordpress.org/latest.tar.gz && tar -xf latest.tar.gz && rm late
 COPY srcs/html /var/www/localhost
 RUN ln -s /usr/share/phpmyadmin /var/www/localhost
 
-# ssl certificates
-COPY srcs/nginx/localhost.crt /etc/nginx/ssl/localhost.crt
-COPY srcs/nginx/localhost.key /etc/nginx/ssl/localhost.key
+COPY srcs/nginx/cert.crt /etc/nginx/ssl/cert.crt
+COPY srcs/nginx/cert.key /etc/nginx/ssl/cert.key
 
 # remove default nginx landing page
 RUN rm /etc/nginx/sites-enabled/*
