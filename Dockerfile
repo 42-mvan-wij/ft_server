@@ -3,15 +3,7 @@ FROM debian:buster
 # RUN echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
 # install packages
 RUN apt-get update
-# RUN apt-get upgrade -y
-RUN apt-get install -y nginx
-# RUN apt-get install -y openssl
-RUN apt-get install -y mariadb-server
-RUN apt-get install -y php-xml
-RUN apt-get install -y php-mysql
-RUN apt-get install -y php-fpm
-RUN apt-get install -y wget
-RUN apt-get install -y php-mbstring
+RUN apt-get install -y nginx mariadb-server php-xml php-mysql php-fpm php-mbstring
 
 # install phpmyadmin
 COPY srcs/phpMyAdmin-5.1.0-english.tar.gz phpMyAdmin.tar.gz
@@ -45,7 +37,7 @@ COPY srcs/nginx/nginx.conf /etc/nginx/sites-available/localhost
 RUN sed -i s/__AUTO_INDEX__/${autoindex}/ /etc/nginx/sites-available/localhost
 RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/
 
-RUN mkdir -p /run/php
+RUN mkdir -p /run/php && mkdir -p /usr/share/phpmyadmin/tmp && chown www-data /usr/share/phpmyadmin/tmp
 
 COPY srcs/entrypoint.sh /etc/entrypoint.sh
 EXPOSE 80 443
