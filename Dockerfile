@@ -12,20 +12,20 @@ RUN apt-get install -y php-mysql
 RUN apt-get install -y php-fpm
 RUN apt-get install -y wget
 
-RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-english.tar.gz && tar -xf phpMyAdmin-5.1.0-english.tar.gz && mv phpMyAdmin-*/ /usr/share/phpmyadmin && rm phpMyAdmin-5.1.0-english.tar.gz
-RUN service maria-db start
-RUN mysql -u root -p << "_EOF_\
-CREATE DATATBASE wordpress;\
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'localhost' INDENTIFIED BY 'wordpress';\
-GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%' INDENTIFIED BY 'wordpress';\
-FLUSH PRIVILEGES;\
-"
-RUN wget https://wordpress.org/latest.tar.gz && tar -xf latest.tar.gz && rm latest.tar.gz
+# install phpmyadmin
+COPY srcs/phpMyAdmin-5.1.0-english.tar.gz phpMyAdmin.tar.gz
+RUN tar -xzf phpMyAdmin.tar.gz && mv phpMyAdmin-*/ /usr/share/phpmyadmin && rm phpMyAdmin.tar.gz
 
 # website files
-COPY srcs/html /var/www/localhost
-RUN ln -s /usr/share/phpmyadmin /var/www/localhost
+COPY srcs/html /var/www
+RUN ln -s /usr/share/phpmyadmin /var/www
 
+# install wordpress
+COPY srcs/wordpress/wordpress-5.7.1.tar.gz wordpress.tar.gz
+RUN tar -xzf wordpress.tar.gz && mv wordpress /var/www/wordpress && rm wordpress.tar.gz
+
+
+# store ssl certificates
 COPY srcs/nginx/cert.crt /etc/nginx/ssl/cert.crt
 COPY srcs/nginx/cert.key /etc/nginx/ssl/cert.key
 
